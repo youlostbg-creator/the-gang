@@ -210,7 +210,7 @@
 </div>
 
 <!-- COMBINATIONS MODAL -->
-<div id="combo-modal" style="display:none;position:fixed;inset:0;background:rgba(14,14,18,.93);z-index:150;align-items:center;justify-content:center;padding:24px;animation:fi .3s ease;" onclick="if(event.target===this)this.style.display='none'">
+<div id="combo-modal" style="display:none;position:fixed;inset:0;background:rgba(14,14,18,.93);z-index:150;align-items:center;justify-content:center;padding:24px;animation:fi .3s ease;" onclick="if(event.target===this)this.style.display='none'" ontouchend="if(event.target===this){event.preventDefault();this.style.display='none'}">
   <div style="background:var(--surface);border-radius:20px;padding:28px;max-width:420px;width:100%;border:1px solid rgba(255,255,255,.08);max-height:90vh;overflow-y:auto;">
     <div style="display:flex;align-items:center;justify-content:space-between;margin-bottom:18px;">
       <div style="font-family:'Bebas Neue',sans-serif;font-size:24px;color:var(--accent);letter-spacing:.1em;">Комбинации покера</div>
@@ -241,7 +241,12 @@ const cv=v=>VO[v]||parseInt(v);
 
 function eval7(hand,comm){
   const all=[...hand,...comm];
-  if(all.length<5){const v=hand.map(c=>cv(c.value)).sort((a,b)=>b-a);return[0,...v];}
+  if(all.length<5){
+    // With 2 cards we can still detect a pair
+    const v=hand.map(c=>cv(c.value)).sort((a,b)=>b-a);
+    const isPair=v[0]===v[1];
+    return isPair?[1,v[0],v[1]]:[0,...v];
+  }
   let best=null;
   for(let i=0;i<all.length;i++)for(let j=i+1;j<all.length;j++){
     const f=all.filter((_,k)=>k!==i&&k!==j);
@@ -474,10 +479,11 @@ function renderBottom(S,me){
 }
 
 // ===== RESULT =====
-let resultShown=false;
+let resultOverlay=null;
 function renderResult(S){
-  if(resultShown)return;
-  resultShown=true;
+  // Remove stale overlay if state refreshed
+  if(resultOverlay&&!document.body.contains(resultOverlay))resultOverlay=null;
+  if(resultOverlay)return; // already showing
 
   const scores=S.players.map(p=>({
     name:p.name,hand:p.hand,
@@ -488,14 +494,28 @@ function renderResult(S){
   const commR=[[],S.community.slice(0,3),S.community.slice(0,4),S.community.slice(0,5)];
   const rr=commR.map((comm,round)=>{
     const rs=scores.map((p,i)=>({i,score:eval7(p.hand,comm),stars:p.chips[round]}));
+    // Sort ascending by strength
     const by=[...rs].sort((a,b)=>cmp(a.score,b.score));
-    const exp={};by.forEach((p,r)=>exp[p.i]=r+1);
-    return scores.every((_,i)=>rs[i].stars===exp[i]);
+    // Assign expected ranks accounting for ties:
+    // players with equal strength share a rank range, any chip in that range is valid
+    const expMin={};const expMax={};
+    let r=0;
+    while(r<by.length){
+      let end=r;
+      while(end+1<by.length&&cmp(by[end].score,by[end+1].score)===0)end++;
+      // positions r..end are ties → rank range [r+1 .. end+1]
+      for(let k=r;k<=end;k++){expMin[by[k].i]=r+1;expMax[by[k].i]=end+1;}
+      r=end+1;
+    }
+    return scores.every((_,i)=>rs[i].stars>=expMin[i]&&rs[i].stars<=expMax[i]);
   });
   const win=rr[3];
 
   const ov=document.createElement('div');ov.className='overlay';
-  ov.onclick=e=>{if(e.target===ov){ov.remove();resultShown=false;}};
+  resultOverlay=ov;
+  const closeOv=e=>{if(e.target===ov){ov.remove();resultOverlay=null;}};
+  ov.onclick=closeOv;
+  ov.addEventListener('touchend',e=>{if(e.target===ov){e.preventDefault();ov.remove();resultOverlay=null;}});
   const rc=document.createElement('div');rc.className='rcard';
   rc.innerHTML=`<div class="remoji">${win?'🏆':'💥'}</div>
     <div class="rtitle ${win?'win':'lose'}">${win?'ПОБЕДА!':'ПРОВАЛ'}</div>
@@ -525,13 +545,16 @@ function renderResult(S){
   if(me&&me.id===S.hostId){
     const btn=document.createElement('button');btn.className='btn btn-gold';btn.style.marginTop='4px';
     btn.textContent='ИГРАТЬ СНОВА';
-    btn.onclick=()=>{ov.remove();resultShown=false;send({type:'restart'});};
+    btn.onclick=()=>{ov.remove();resultOverlay=null;send({type:'restart'});};
     rc.appendChild(btn);
-  } else {
+  } else if(me) {
     const btn=document.createElement('button');btn.className='btn btn-ghost';btn.style.marginTop='4px';
-    btn.textContent='В ЛОББИ';
-    btn.onclick=()=>{ov.remove();resultShown=false;send({type:'restart'});};
+    btn.textContent='ЗАКРЫТЬ';
+    btn.onclick=()=>{ov.remove();resultOverlay=null;};
     rc.appendChild(btn);
+    const hint=document.createElement('p');hint.style.cssText='font-size:12px;color:var(--muted);margin-top:8px;';
+    hint.textContent='Ждём хоста для новой игры...';
+    rc.appendChild(hint);
   }
   ov.appendChild(rc);document.body.appendChild(ov);
 }
@@ -541,7 +564,7 @@ function show(id){
   document.querySelectorAll('.screen').forEach(s=>s.classList.remove('active'));
   document.getElementById(id).classList.add('active');
   if(id==='game')document.getElementById('game').classList.add('active');
-  resultShown=false;
+  if(resultOverlay){resultOverlay.remove();resultOverlay=null;}
 }
 function toast(msg){const t=document.createElement('div');t.className='toast';t.textContent=msg;document.body.appendChild(t);setTimeout(()=>t.remove(),3000);}
 function copyCode(){navigator.clipboard.writeText(roomId.toUpperCase()).then(()=>toast('Код скопирован!'));}
