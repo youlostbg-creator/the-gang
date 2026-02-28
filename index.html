@@ -714,10 +714,10 @@ function renderPlayers(state, me) {
     }
     top.appendChild(info);
 
-    // Cards
+    // Cards — face up only for yourself, face down for others
     const cardGroup = document.createElement('div');
     cardGroup.className = 'player-cards';
-    player.hand.forEach(card => cardGroup.appendChild(renderCard(card, true)));
+    player.hand.forEach(card => cardGroup.appendChild(renderCard(card, revealAll || isMe(player))));
     top.appendChild(cardGroup);
 
     // Chip action (only for me, only if not ready)
