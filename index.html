@@ -7,939 +7,509 @@
 <link href="https://fonts.googleapis.com/css2?family=Bebas+Neue&family=Barlow:wght@300;400;600&display=swap" rel="stylesheet">
 <style>
   :root {
-    --bg: #0e0e12;
-    --surface: #1a1a22;
-    --surface2: #242430;
-    --accent: #e8c84a;
-    --accent2: #c44b2b;
-    --text: #f0ede6;
-    --muted: #666675;
-    --green: #3db87a;
-    --red: #e05050;
+    --bg:#0e0e12; --surface:#1a1a22; --s2:#242430;
+    --accent:#e8c84a; --red2:#c44b2b; --text:#f0ede6;
+    --muted:#666675; --green:#3db87a; --red:#e05050;
   }
-  * { margin: 0; padding: 0; box-sizing: border-box; }
-  body {
-    background: var(--bg);
-    color: var(--text);
-    font-family: 'Barlow', sans-serif;
-    min-height: 100vh;
-    overflow-x: hidden;
-  }
-  body::before {
-    content: '';
-    position: fixed;
-    inset: 0;
-    background-image:
-      radial-gradient(ellipse at 20% 50%, rgba(232,200,74,0.04) 0%, transparent 60%),
-      radial-gradient(ellipse at 80% 20%, rgba(196,75,43,0.04) 0%, transparent 50%);
-    pointer-events: none;
-    z-index: 0;
-  }
-  #app { position: relative; z-index: 1; }
+  *{margin:0;padding:0;box-sizing:border-box;}
+  body{background:var(--bg);color:var(--text);font-family:'Barlow',sans-serif;min-height:100vh;}
+  body::before{content:'';position:fixed;inset:0;background:radial-gradient(ellipse at 20% 50%,rgba(232,200,74,.04),transparent 60%),radial-gradient(ellipse at 80% 20%,rgba(196,75,43,.04),transparent 50%);pointer-events:none;z-index:0;}
+  #app{position:relative;z-index:1;}
 
-  .screen { display: none; min-height: 100vh; }
-  .screen.active { display: flex; flex-direction: column; align-items: center; justify-content: center; padding: 24px; }
+  .screen{display:none;min-height:100vh;}
+  .screen.active{display:flex;flex-direction:column;align-items:center;justify-content:center;padding:24px;}
 
-  /* LOGO */
-  .logo { text-align: center; margin-bottom: 8px; }
-  .logo h1 {
-    font-family: 'Bebas Neue', sans-serif;
-    font-size: clamp(56px, 10vw, 100px);
-    letter-spacing: 0.08em;
-    color: var(--accent);
-    line-height: 0.9;
-    text-shadow: 4px 4px 0 rgba(196,75,43,0.4);
-  }
-  .logo p { font-size: 12px; letter-spacing: 0.2em; text-transform: uppercase; color: var(--muted); margin-top: 6px; }
+  .logo h1{font-family:'Bebas Neue',sans-serif;font-size:clamp(56px,10vw,100px);letter-spacing:.08em;color:var(--accent);line-height:.9;text-shadow:4px 4px 0 rgba(196,75,43,.4);text-align:center;}
+  .logo p{font-size:12px;letter-spacing:.2em;text-transform:uppercase;color:var(--muted);margin-top:6px;text-align:center;}
 
-  /* CARDS */
-  .setup-card {
-    background: var(--surface);
-    border: 1px solid rgba(255,255,255,0.06);
-    border-radius: 16px;
-    padding: 28px;
-    width: 100%;
-    max-width: 420px;
-  }
-  .setup-card h2 { font-family: 'Bebas Neue', sans-serif; font-size: 18px; letter-spacing: 0.12em; color: var(--muted); margin-bottom: 16px; }
+  .box{background:var(--surface);border:1px solid rgba(255,255,255,.06);border-radius:16px;padding:28px;width:100%;max-width:420px;}
+  .box h2{font-family:'Bebas Neue',sans-serif;font-size:18px;letter-spacing:.12em;color:var(--muted);margin-bottom:16px;}
 
-  .input-field {
-    background: var(--surface2);
-    border: 1px solid rgba(255,255,255,0.08);
-    border-radius: 8px;
-    padding: 12px 16px;
-    color: var(--text);
-    font-family: 'Barlow', sans-serif;
-    font-size: 15px;
-    outline: none;
-    transition: border-color 0.15s;
-    width: 100%;
-  }
-  .input-field:focus { border-color: var(--accent); }
-  .input-field::placeholder { color: var(--muted); }
+  input{background:var(--s2);border:1px solid rgba(255,255,255,.08);border-radius:8px;padding:12px 16px;color:var(--text);font-family:'Barlow',sans-serif;font-size:15px;outline:none;transition:border-color .15s;width:100%;}
+  input:focus{border-color:var(--accent);}
+  input::placeholder{color:var(--muted);}
 
-  .btn-primary {
-    width: 100%;
-    padding: 14px;
-    background: var(--accent);
-    color: #0e0e12;
-    border: none;
-    border-radius: 10px;
-    font-family: 'Bebas Neue', sans-serif;
-    font-size: 20px;
-    letter-spacing: 0.1em;
-    cursor: pointer;
-    transition: all 0.15s;
-    margin-top: 10px;
-  }
-  .btn-primary:hover { background: #f0d460; transform: translateY(-1px); }
-  .btn-primary:disabled { background: var(--surface2); color: var(--muted); cursor: not-allowed; transform: none; }
+  .btn{width:100%;padding:14px;border:none;border-radius:10px;font-family:'Bebas Neue',sans-serif;font-size:20px;letter-spacing:.1em;cursor:pointer;transition:all .15s;margin-top:10px;}
+  .btn-gold{background:var(--accent);color:#0e0e12;}
+  .btn-gold:hover{background:#f0d460;transform:translateY(-1px);}
+  .btn-ghost{background:transparent;color:var(--muted);border:1px solid rgba(255,255,255,.1);}
+  .btn-ghost:hover{border-color:var(--accent);color:var(--accent);}
+  .btn:disabled{background:var(--s2);color:var(--muted);cursor:not-allowed;transform:none;}
 
-  .btn-secondary {
-    width: 100%;
-    padding: 12px;
-    background: transparent;
-    color: var(--muted);
-    border: 1px solid rgba(255,255,255,0.1);
-    border-radius: 10px;
-    font-family: 'Bebas Neue', sans-serif;
-    font-size: 18px;
-    letter-spacing: 0.1em;
-    cursor: pointer;
-    transition: all 0.15s;
-    margin-top: 8px;
-  }
-  .btn-secondary:hover { border-color: var(--accent); color: var(--accent); }
-
-  .divider { display: flex; align-items: center; gap: 12px; margin: 16px 0; color: var(--muted); font-size: 12px; letter-spacing: 0.1em; }
-  .divider::before, .divider::after { content: ''; flex: 1; height: 1px; background: rgba(255,255,255,0.08); }
+  .divider{display:flex;align-items:center;gap:12px;margin:16px 0;color:var(--muted);font-size:12px;letter-spacing:.1em;}
+  .divider::before,.divider::after{content:'';flex:1;height:1px;background:rgba(255,255,255,.08);}
 
   /* LOBBY */
-  #lobby-screen { gap: 20px; }
-  .room-code-display {
-    background: var(--surface2);
-    border: 1px solid rgba(232,200,74,0.2);
-    border-radius: 12px;
-    padding: 20px;
-    text-align: center;
-    width: 100%;
-    max-width: 420px;
-  }
-  .room-code-label { font-size: 11px; letter-spacing: 0.2em; text-transform: uppercase; color: var(--muted); margin-bottom: 8px; }
-  .room-code {
-    font-family: 'Bebas Neue', sans-serif;
-    font-size: 42px;
-    letter-spacing: 0.2em;
-    color: var(--accent);
-    cursor: pointer;
-    transition: opacity 0.15s;
-  }
-  .room-code:hover { opacity: 0.8; }
-  .room-code-hint { font-size: 12px; color: var(--muted); margin-top: 4px; }
+  #lobby{gap:16px;}
+  .code-box{background:var(--s2);border:1px solid rgba(232,200,74,.2);border-radius:12px;padding:20px;text-align:center;width:100%;max-width:420px;}
+  .code-lbl{font-size:11px;letter-spacing:.2em;text-transform:uppercase;color:var(--muted);margin-bottom:8px;}
+  .code{font-family:'Bebas Neue',sans-serif;font-size:48px;letter-spacing:.2em;color:var(--accent);cursor:pointer;}
+  .code-hint{font-size:11px;color:var(--muted);margin-top:4px;}
+  .lobby-player{display:flex;align-items:center;gap:10px;padding:8px 0;border-bottom:1px solid rgba(255,255,255,.04);font-size:15px;}
+  .lobby-player:last-child{border-bottom:none;}
+  .dot{width:8px;height:8px;border-radius:50%;flex-shrink:0;}
+  .dot-on{background:var(--green);}
+  .dot-off{background:var(--muted);}
+  .badge{font-size:10px;letter-spacing:.1em;text-transform:uppercase;color:var(--accent);background:rgba(232,200,74,.1);border-radius:4px;padding:2px 6px;margin-left:4px;}
 
-  .players-lobby {
-    background: var(--surface);
-    border: 1px solid rgba(255,255,255,0.05);
-    border-radius: 12px;
-    padding: 20px;
-    width: 100%;
-    max-width: 420px;
-  }
-  .players-lobby h3 { font-family: 'Bebas Neue', sans-serif; font-size: 16px; letter-spacing: 0.1em; color: var(--muted); margin-bottom: 14px; }
-  .lobby-player {
-    display: flex;
-    align-items: center;
-    gap: 10px;
-    padding: 8px 0;
-    border-bottom: 1px solid rgba(255,255,255,0.04);
-    font-size: 15px;
-  }
-  .lobby-player:last-child { border-bottom: none; }
-  .lobby-player-dot { width: 8px; height: 8px; border-radius: 50%; background: var(--green); flex-shrink: 0; }
-  .host-badge {
-    font-size: 10px;
-    letter-spacing: 0.1em;
-    text-transform: uppercase;
-    color: var(--accent);
-    background: rgba(232,200,74,0.1);
-    border-radius: 4px;
-    padding: 2px 6px;
-    margin-left: 4px;
-  }
-  .waiting-text { font-size: 13px; color: var(--muted); text-align: center; padding: 8px 0; }
+  /* GAME */
+  #game{display:none;flex-direction:column;min-height:100vh;padding:16px;max-width:900px;margin:0 auto;width:100%;}
+  #game.active{display:flex;}
+  .game-header{display:flex;align-items:center;justify-content:space-between;padding-bottom:16px;}
+  .gtitle{font-family:'Bebas Neue',sans-serif;font-size:28px;color:var(--accent);letter-spacing:.1em;}
+  .phase-dots{display:flex;gap:6px;}
+  .pdot{width:8px;height:8px;border-radius:50%;background:var(--s2);border:1px solid var(--muted);transition:all .3s;}
+  .pdot.done{background:var(--green);border-color:var(--green);}
+  .pdot.active{background:var(--accent);border-color:var(--accent);box-shadow:0 0 8px rgba(232,200,74,.5);}
+  .my-badge{font-size:13px;color:var(--muted);background:var(--s2);border-radius:20px;padding:6px 14px;}
+  .my-badge span{color:var(--accent);font-weight:600;}
 
-  /* GAME SCREEN */
-  #game-screen {
-    display: none;
-    flex-direction: column;
-    min-height: 100vh;
-    padding: 16px;
-    max-width: 900px;
-    margin: 0 auto;
-    width: 100%;
-  }
-  #game-screen.active { display: flex; }
+  .comm-section{background:var(--surface);border-radius:14px;padding:20px;margin-bottom:12px;border:1px solid rgba(255,255,255,.05);}
+  .slabel{font-size:11px;letter-spacing:.2em;text-transform:uppercase;color:var(--muted);margin-bottom:12px;}
+  .comm-cards{display:flex;gap:10px;flex-wrap:wrap;}
 
-  .game-header {
-    display: flex;
-    align-items: center;
-    justify-content: space-between;
-    padding: 12px 0 20px;
-  }
-  .game-title { font-family: 'Bebas Neue', sans-serif; font-size: 28px; color: var(--accent); letter-spacing: 0.1em; }
-  .my-name-badge {
-    font-size: 13px;
-    color: var(--muted);
-    background: var(--surface2);
-    border-radius: 20px;
-    padding: 6px 14px;
-  }
-  .my-name-badge span { color: var(--accent); font-weight: 600; }
+  .card{width:62px;height:88px;border-radius:8px;border:1px solid rgba(255,255,255,.1);display:flex;flex-direction:column;align-items:center;justify-content:center;font-family:'Bebas Neue',sans-serif;font-size:20px;position:relative;flex-shrink:0;}
+  .card.up{background:#f5f0e8;color:#1a1a22;}
+  .card.up.hearts,.card.up.diamonds{color:#c0272d;}
+  .card.dn{background:linear-gradient(135deg,#1e1e2e,#2a2a3e);border:2px solid rgba(232,200,74,.2);}
+  .card.dn::after{content:'🂠';font-size:36px;opacity:.3;}
+  .cc{position:absolute;top:4px;left:6px;font-size:11px;line-height:1;display:flex;flex-direction:column;align-items:center;}
+  .cc.br{top:auto;left:auto;bottom:4px;right:6px;transform:rotate(180deg);}
+  .cs{font-size:28px;}
+  .card.anim{animation:flip .4s ease-out both;}
+  @keyframes flip{0%{transform:rotateY(90deg) scale(.8);opacity:0}100%{transform:rotateY(0) scale(1);opacity:1}}
 
-  .phase-indicator { display: flex; gap: 6px; align-items: center; }
-  .phase-dot { width: 8px; height: 8px; border-radius: 50%; background: var(--surface2); border: 1px solid var(--muted); transition: all 0.3s; }
-  .phase-dot.done { background: var(--green); border-color: var(--green); }
-  .phase-dot.active { background: var(--accent); border-color: var(--accent); box-shadow: 0 0 8px rgba(232,200,74,0.5); }
+  .instr{background:linear-gradient(135deg,rgba(232,200,74,.08),rgba(232,200,74,.03));border:1px solid rgba(232,200,74,.2);border-radius:12px;padding:14px 20px;margin-bottom:12px;font-size:14px;text-align:center;line-height:1.5;}
+  .instr strong{color:var(--accent);font-weight:600;}
 
-  .community-section {
-    background: var(--surface);
-    border-radius: 14px;
-    padding: 20px;
-    margin-bottom: 16px;
-    border: 1px solid rgba(255,255,255,0.05);
-  }
-  .section-label { font-size: 11px; letter-spacing: 0.2em; text-transform: uppercase; color: var(--muted); margin-bottom: 14px; }
-  .community-cards { display: flex; gap: 10px; flex-wrap: wrap; }
+  .players{display:flex;flex-direction:column;gap:10px;flex:1;}
+  .ppanel{background:var(--surface);border:1px solid rgba(255,255,255,.05);border-radius:12px;padding:16px;display:flex;flex-direction:column;gap:10px;transition:border-color .2s;}
+  .ppanel.me{border-color:rgba(232,200,74,.3);background:rgba(232,200,74,.03);}
+  .ppanel.offline{opacity:.5;}
+  .ptop{display:flex;align-items:center;gap:12px;flex-wrap:wrap;}
+  .pinfo{flex:1;min-width:0;}
+  .pname{font-weight:600;font-size:15px;}
+  .pcombo{font-size:11px;color:var(--muted);margin-top:2px;}
+  .me-lbl{font-size:10px;color:var(--accent);letter-spacing:.1em;text-transform:uppercase;margin-left:6px;opacity:.8;}
 
-  /* CARDS */
-  .card {
-    width: 62px; height: 88px;
-    border-radius: 8px;
-    border: 1px solid rgba(255,255,255,0.1);
-    display: flex; flex-direction: column; align-items: center; justify-content: center;
-    font-family: 'Bebas Neue', sans-serif;
-    font-size: 20px;
-    position: relative;
-    flex-shrink: 0;
-  }
-  .card.face-up { background: #f5f0e8; color: #1a1a22; }
-  .card.face-up.hearts, .card.face-up.diamonds { color: #c0272d; }
-  .card.face-down { background: linear-gradient(135deg, #1e1e2e 0%, #2a2a3e 100%); border: 2px solid rgba(232,200,74,0.2); }
-  .card.face-down::after { content: '🂠'; font-size: 36px; opacity: 0.3; }
-  .card-corner { position: absolute; top: 4px; left: 6px; font-size: 11px; line-height: 1; display: flex; flex-direction: column; align-items: center; }
-  .card-corner.br { top: auto; left: auto; bottom: 4px; right: 6px; transform: rotate(180deg); }
-  .card-suit-center { font-size: 28px; }
-  .card.new-reveal { animation: cardReveal 0.4s ease-out both; }
-  @keyframes cardReveal {
-    0% { transform: rotateY(90deg) scale(0.8); opacity: 0; }
-    100% { transform: rotateY(0deg) scale(1); opacity: 1; }
-  }
+  .pcards{display:flex;gap:6px;}
+  .pcards .card{width:44px;height:62px;font-size:14px;}
+  .pcards .cs{font-size:18px;}
+  .pcards .cc{font-size:9px;}
 
-  /* PHASE INSTRUCTION */
-  .phase-instruction {
-    background: linear-gradient(135deg, rgba(232,200,74,0.08), rgba(232,200,74,0.03));
-    border: 1px solid rgba(232,200,74,0.2);
-    border-radius: 12px;
-    padding: 14px 20px;
-    margin-bottom: 16px;
-    font-size: 14px;
-    text-align: center;
-    line-height: 1.5;
-  }
-  .phase-instruction strong { color: var(--accent); font-weight: 600; }
+  .chips{display:flex;gap:6px;flex-wrap:wrap;}
+  .chip{width:42px;height:42px;border-radius:50%;border:2px solid;display:flex;align-items:center;justify-content:center;cursor:pointer;transition:all .15s;flex-shrink:0;}
+  .chip-s{font-size:10px;line-height:1;text-align:center;font-family:'Bebas Neue',sans-serif;}
+  .chip.avail{border-color:rgba(255,255,255,.2);background:var(--s2);color:var(--text);}
+  .chip.avail:hover{border-color:var(--accent);color:var(--accent);transform:scale(1.08);}
+  .chip.sel{border-color:var(--accent);background:rgba(232,200,74,.15);color:var(--accent);transform:scale(1.05);box-shadow:0 0 12px rgba(232,200,74,.3);}
+  .chip.taken{border-color:var(--s2);background:transparent;color:var(--muted);cursor:not-allowed;opacity:.3;}
 
-  /* PLAYER PANELS */
-  .players-section { display: flex; flex-direction: column; gap: 10px; flex: 1; }
-  .player-panel {
-    background: var(--surface);
-    border: 1px solid rgba(255,255,255,0.05);
-    border-radius: 12px;
-    padding: 16px;
-    display: flex;
-    flex-direction: column;
-    gap: 12px;
-    transition: border-color 0.2s;
-  }
-  .player-panel.is-me { border-color: rgba(232,200,74,0.3); background: rgba(232,200,74,0.03); }
-  .player-panel-top { display: flex; align-items: center; gap: 14px; flex-wrap: wrap; }
-  .player-info { flex: 1; min-width: 0; }
-  .player-name { font-weight: 600; font-size: 15px; }
-  .combo-badge { font-size: 11px; color: var(--muted); margin-top: 2px; }
-  .me-label { font-size: 10px; color: var(--accent); letter-spacing: 0.1em; text-transform: uppercase; margin-left: 6px; opacity: 0.8; }
+  .chip-actions{display:flex;gap:8px;margin-top:4px;}
+  .cbtn{padding:9px 16px;border:none;border-radius:8px;font-family:'Bebas Neue',sans-serif;font-size:15px;cursor:pointer;transition:all .15s;white-space:nowrap;}
+  .cbtn-ok{background:var(--accent);color:#0e0e12;}
+  .cbtn-ok:hover{background:#f0d460;}
+  .cbtn-ok:disabled{background:var(--s2);color:var(--muted);cursor:not-allowed;}
+  .cbtn-cancel{background:transparent;border:1px solid rgba(255,255,255,.15);color:var(--muted);}
+  .cbtn-cancel:hover{border-color:var(--red);color:var(--red);}
 
-  .player-cards { display: flex; gap: 6px; }
-  .player-cards .card { width: 44px; height: 62px; font-size: 14px; }
-  .player-cards .card-suit-center { font-size: 18px; }
-  .player-cards .card-corner { font-size: 9px; }
+  .hist{display:flex;gap:5px;align-items:center;flex-wrap:wrap;padding-top:8px;border-top:1px solid rgba(255,255,255,.05);}
+  .hlbl{font-size:10px;color:var(--muted);letter-spacing:.1em;text-transform:uppercase;margin-right:2px;flex-shrink:0;}
+  .hchip{display:flex;flex-direction:column;align-items:center;gap:1px;width:36px;height:40px;border-radius:8px;justify-content:center;flex-shrink:0;border:1px solid rgba(255,255,255,.1);background:var(--s2);}
+  .hchip.cur{border:2px solid var(--accent);background:rgba(232,200,74,.12);}
+  .hchip .hs{font-size:13px;color:var(--muted);}
+  .hchip.cur .hs{color:var(--accent);}
+  .hchip .hl{font-size:9px;color:var(--muted);}
 
-  /* CHIP SELECTOR */
-  .chip-selector { display: flex; gap: 6px; flex-wrap: wrap; }
-  .chip {
-    width: 42px; height: 42px;
-    border-radius: 50%;
-    border: 2px solid;
-    display: flex; align-items: center; justify-content: center;
-    cursor: pointer;
-    font-family: 'Bebas Neue', sans-serif;
-    font-size: 14px;
-    transition: all 0.15s;
-    flex-shrink: 0;
-  }
-  .chip.available { border-color: rgba(255,255,255,0.2); background: var(--surface2); color: var(--text); }
-  .chip.available:hover { border-color: var(--accent); color: var(--accent); transform: scale(1.08); }
-  .chip.selected { border-color: var(--accent); background: rgba(232,200,74,0.15); color: var(--accent); transform: scale(1.05); box-shadow: 0 0 12px rgba(232,200,74,0.3); }
-  .chip.taken { border-color: var(--surface2); background: transparent; color: var(--muted); cursor: not-allowed; opacity: 0.3; }
-  .chip-stars { font-size: 10px; line-height: 1; text-align: center; }
+  .bottom{padding:16px 0 8px;display:flex;justify-content:center;}
 
-  .confirm-chip-btn {
-    padding: 10px 18px;
-    background: var(--accent);
-    color: #0e0e12;
-    border: none;
-    border-radius: 8px;
-    font-family: 'Bebas Neue', sans-serif;
-    font-size: 16px;
-    cursor: pointer;
-    transition: all 0.15s;
-    white-space: nowrap;
-  }
-  .confirm-chip-btn:hover { background: #f0d460; }
-  .confirm-chip-btn:disabled { background: var(--surface2); color: var(--muted); cursor: not-allowed; }
+  /* RESULT OVERLAY */
+  .overlay{position:fixed;inset:0;background:rgba(14,14,18,.93);display:flex;align-items:center;justify-content:center;z-index:100;padding:24px;animation:fi .4s ease;overflow-y:auto;}
+  @keyframes fi{from{opacity:0}to{opacity:1}}
+  .rcard{background:var(--surface);border-radius:20px;padding:32px 28px;max-width:460px;width:100%;text-align:center;border:1px solid rgba(255,255,255,.08);}
+  .remoji{font-size:56px;margin-bottom:12px;}
+  .rtitle{font-family:'Bebas Neue',sans-serif;font-size:44px;letter-spacing:.1em;margin-bottom:6px;}
+  .rtitle.win{color:var(--green);}
+  .rtitle.lose{color:var(--red);}
+  .rsub{color:var(--muted);font-size:13px;margin-bottom:20px;}
+  .rplayers{display:flex;flex-direction:column;gap:8px;margin-bottom:16px;text-align:left;}
+  .rrow{display:flex;align-items:center;gap:10px;background:var(--s2);border-radius:10px;padding:11px 14px;}
+  .rrank{font-family:'Bebas Neue',sans-serif;font-size:20px;color:var(--muted);width:24px;}
+  .rname{flex:1;font-weight:600;}
+  .rcombo{font-size:11px;color:var(--muted);}
+  .rounds{display:flex;gap:6px;justify-content:center;margin-bottom:18px;flex-wrap:wrap;}
+  .rpill{padding:5px 10px;border-radius:20px;font-size:11px;}
+  .rpill.ok{background:rgba(61,184,122,.15);color:var(--green);border:1px solid rgba(61,184,122,.3);}
+  .rpill.fail{background:rgba(224,80,80,.15);color:var(--red);border:1px solid rgba(224,80,80,.3);}
+  .rpill.key{border-width:2px;font-weight:600;}
 
-  /* CHIP HISTORY */
-  .player-chip-history {
-    display: flex;
-    gap: 6px;
-    flex-wrap: wrap;
-    padding-top: 4px;
-    border-top: 1px solid rgba(255,255,255,0.05);
-    align-items: center;
-  }
-  .hist-label { font-size: 10px; color: var(--muted); letter-spacing: 0.1em; text-transform: uppercase; margin-right: 2px; flex-shrink: 0; }
-  .hist-chip {
-    display: flex; flex-direction: column; align-items: center; gap: 1px;
-    width: 36px; height: 40px;
-    border-radius: 8px; justify-content: center; flex-shrink: 0;
-    border: 1px solid rgba(255,255,255,0.1);
-    background: var(--surface2);
-  }
-  .hist-chip.current { border: 2px solid var(--accent); background: rgba(232,200,74,0.12); }
-  .hist-chip-stars { font-size: 13px; color: var(--muted); }
-  .hist-chip.current .hist-chip-stars { color: var(--accent); }
-  .hist-chip-label { font-size: 9px; color: var(--muted); }
-
-  /* BOTTOM BAR */
-  .bottom-bar { padding: 16px 0 8px; display: flex; justify-content: center; }
-  .btn-reveal {
-    padding: 16px 48px;
-    background: var(--accent2);
-    color: var(--text);
-    border: none;
-    border-radius: 12px;
-    font-family: 'Bebas Neue', sans-serif;
-    font-size: 22px;
-    letter-spacing: 0.1em;
-    cursor: pointer;
-    transition: all 0.2s;
-    box-shadow: 0 4px 20px rgba(196,75,43,0.3);
-  }
-  .btn-reveal:hover { background: #d45530; transform: translateY(-2px); }
-
-  /* RESULT */
-  .result-overlay {
-    position: fixed; inset: 0;
-    background: rgba(14,14,18,0.92);
-    display: flex; align-items: center; justify-content: center;
-    z-index: 100; padding: 24px;
-    animation: fadeIn 0.4s ease;
-    overflow-y: auto;
-  }
-  @keyframes fadeIn { from { opacity: 0; } to { opacity: 1; } }
-  .result-card {
-    background: var(--surface);
-    border-radius: 20px;
-    padding: 36px 32px;
-    max-width: 480px; width: 100%;
-    text-align: center;
-    border: 1px solid rgba(255,255,255,0.08);
-  }
-  .result-emoji { font-size: 64px; margin-bottom: 16px; }
-  .result-title { font-family: 'Bebas Neue', sans-serif; font-size: 48px; letter-spacing: 0.1em; margin-bottom: 8px; }
-  .result-title.win { color: var(--green); }
-  .result-title.lose { color: var(--red); }
-  .result-subtitle { color: var(--muted); font-size: 14px; margin-bottom: 24px; }
-  .result-players { display: flex; flex-direction: column; gap: 10px; margin-bottom: 20px; text-align: left; }
-  .result-player-row {
-    display: flex; align-items: center; gap: 12px;
-    background: var(--surface2); border-radius: 10px; padding: 12px 16px;
-  }
-  .result-rank { font-family: 'Bebas Neue', sans-serif; font-size: 20px; color: var(--muted); width: 24px; }
-  .result-player-name { flex: 1; font-weight: 600; }
-  .result-combo { font-size: 12px; color: var(--muted); }
-  .result-breakdown { display: flex; gap: 8px; justify-content: center; margin-bottom: 20px; flex-wrap: wrap; }
-  .round-pill {
-    padding: 6px 12px; border-radius: 20px; font-size: 12px;
-  }
-  .round-pill.ok { background: rgba(61,184,122,0.15); color: var(--green); border: 1px solid rgba(61,184,122,0.3); }
-  .round-pill.fail { background: rgba(224,80,80,0.15); color: var(--red); border: 1px solid rgba(224,80,80,0.3); }
-  .round-pill.decisive { border-width: 2px; font-weight: 600; }
-  .btn-play-again {
-    width: 100%; padding: 16px;
-    background: var(--accent); color: #0e0e12;
-    border: none; border-radius: 10px;
-    font-family: 'Bebas Neue', sans-serif; font-size: 20px; letter-spacing: 0.1em;
-    cursor: pointer; transition: all 0.15s;
-  }
-  .btn-play-again:hover { background: #f0d460; }
-
-  /* ERROR TOAST */
-  .toast {
-    position: fixed; bottom: 24px; left: 50%; transform: translateX(-50%);
-    background: var(--accent2); color: white;
-    padding: 12px 24px; border-radius: 10px;
-    font-size: 14px; z-index: 200;
-    animation: toastIn 0.3s ease;
-  }
-  @keyframes toastIn { from { opacity: 0; transform: translateX(-50%) translateY(10px); } to { opacity: 1; transform: translateX(-50%) translateY(0); } }
-
-  .connecting { font-size: 14px; color: var(--muted); text-align: center; padding: 12px; }
+  .toast{position:fixed;bottom:24px;left:50%;transform:translateX(-50%);background:var(--red2);color:#fff;padding:11px 22px;border-radius:10px;font-size:14px;z-index:200;animation:ti .3s ease;}
+  @keyframes ti{from{opacity:0;transform:translateX(-50%) translateY(8px)}to{opacity:1;transform:translateX(-50%) translateY(0)}}
 </style>
 </head>
 <body>
 <div id="app">
 
-  <!-- JOIN SCREEN -->
-  <div id="join-screen" class="screen active">
-    <div class="logo">
-      <h1>THE GANG</h1>
-      <p>Покерные комбинации · Командная игра</p>
-    </div>
-    <div class="setup-card">
-      <h2>Ваше имя</h2>
-      <input id="player-name-input" class="input-field" placeholder="Введите имя" maxlength="20">
-      <div class="divider">ДЕЙСТВИЕ</div>
-      <button class="btn-primary" id="create-btn">СОЗДАТЬ КОМНАТУ</button>
-      <div style="display:flex;gap:8px;margin-top:8px;">
-        <input id="room-code-input" class="input-field" placeholder="Код комнаты" maxlength="6" style="text-transform:uppercase;">
-        <button class="btn-primary" id="join-btn" style="width:auto;padding:14px 20px;margin-top:0;">ВОЙТИ</button>
-      </div>
+<!-- JOIN -->
+<div id="join" class="screen active">
+  <div class="logo"><h1>THE GANG</h1><p>Покерные комбинации · Командная игра</p></div>
+  <div class="box" style="margin-top:24px;">
+    <h2>Ваше имя</h2>
+    <input id="iname" placeholder="Введите имя" maxlength="20">
+    <div class="divider">ДЕЙСТВИЕ</div>
+    <button class="btn btn-gold" id="bcreate">СОЗДАТЬ КОМНАТУ</button>
+    <div style="display:flex;gap:8px;margin-top:8px;">
+      <input id="icode" placeholder="Код комнаты" maxlength="3" style="text-transform:uppercase;letter-spacing:.2em;font-size:18px;">
+      <button class="btn btn-gold" id="bjoin" style="width:auto;padding:14px 20px;margin-top:0;">ВОЙТИ</button>
     </div>
   </div>
-
-  <!-- LOBBY SCREEN -->
-  <div id="lobby-screen" class="screen">
-    <div class="logo"><h1>THE GANG</h1></div>
-    <div class="room-code-display" id="room-code-display">
-      <div class="room-code-label">Код комнаты — поделись с друзьями</div>
-      <div class="room-code" id="room-code-text" onclick="copyRoomCode()">——</div>
-      <div class="room-code-hint">Нажми чтобы скопировать</div>
-    </div>
-    <div class="players-lobby">
-      <h3>Игроки в комнате</h3>
-      <div id="lobby-players-list"></div>
-      <div class="waiting-text" id="lobby-waiting-text"></div>
-    </div>
-    <button class="btn-primary" id="start-game-btn" style="max-width:420px;width:100%;display:none;">НАЧАТЬ ИГРУ</button>
-    <button class="btn-secondary" id="leave-btn" style="max-width:420px;width:100%;">ВЫЙТИ</button>
-  </div>
-
-  <!-- GAME SCREEN -->
-  <div id="game-screen" class="screen">
-    <div class="game-header">
-      <span class="game-title">THE GANG</span>
-      <div style="display:flex;align-items:center;gap:12px;">
-        <div class="phase-indicator" id="phase-dots"></div>
-        <div class="my-name-badge">Я: <span id="my-name-display"></span></div>
-      </div>
-    </div>
-    <div class="community-section">
-      <div class="section-label">Общие карты</div>
-      <div class="community-cards" id="community-cards"></div>
-    </div>
-    <div class="phase-instruction" id="phase-instruction"></div>
-    <div class="players-section" id="players-section"></div>
-    <div class="bottom-bar" id="bottom-bar"></div>
-  </div>
-
 </div>
 
+<!-- LOBBY -->
+<div id="lobby" class="screen">
+  <div class="logo"><h1>THE GANG</h1></div>
+  <div class="code-box">
+    <div class="code-lbl">Код комнаты — поделись с друзьями</div>
+    <div class="code" id="lcode" onclick="copyCode()">—</div>
+    <div class="code-hint">Нажми чтобы скопировать</div>
+  </div>
+  <div class="box">
+    <h2>Игроки</h2>
+    <div id="lplayers"></div>
+    <p id="lwait" style="font-size:13px;color:var(--muted);text-align:center;padding:8px 0;"></p>
+  </div>
+  <button class="btn btn-gold" id="bstart" style="max-width:420px;width:100%;display:none;">НАЧАТЬ ИГРУ</button>
+  <button class="btn btn-ghost" id="bleave" style="max-width:420px;width:100%;margin-top:8px;">ВЫЙТИ</button>
+</div>
+
+<!-- GAME -->
+<div id="game" class="screen">
+  <div class="game-header">
+    <span class="gtitle">THE GANG</span>
+    <div style="display:flex;align-items:center;gap:10px;">
+      <div class="phase-dots" id="pdots"></div>
+      <div class="my-badge">Я: <span id="myname"></span></div>
+    </div>
+  </div>
+  <div class="comm-section">
+    <div class="slabel">Общие карты</div>
+    <div class="comm-cards" id="ccards"></div>
+  </div>
+  <div class="instr" id="instr"></div>
+  <div class="players" id="players"></div>
+  <div class="bottom" id="bottom"></div>
+</div>
+
+</div>
 <script>
-// ===== CARD EVALUATION =====
-const VALUE_ORDER = {2:2,3:3,4:4,5:5,6:6,7:7,8:8,9:9,10:10,J:11,Q:12,K:13,A:14};
-const SUIT_SYMBOLS = {spades:'♠',hearts:'♥',diamonds:'♦',clubs:'♣'};
-const COMBO_NAMES = ['Старшая карта','Пара','Две пары','Тройка','Стрит','Флеш','Фулл-хаус','Каре','Стрит-флеш'];
+// ===== CARD EVAL =====
+const VO={2:2,3:3,4:4,5:5,6:6,7:7,8:8,9:9,10:10,J:11,Q:12,K:13,A:14};
+const SS={spades:'♠',hearts:'♥',diamonds:'♦',clubs:'♣'};
+const CN=['Старшая карта','Пара','Две пары','Тройка','Стрит','Флеш','Фулл-хаус','Каре','Стрит-флеш'];
+const cv=v=>VO[v]||parseInt(v);
 
-function cardVal(v) { return VALUE_ORDER[v] || parseInt(v); }
-
-function evaluateHand(hand, community) {
-  const all = [...hand, ...community];
-  if (all.length < 5) {
-    // Not enough cards — just return high card score from hole cards
-    const vals = hand.map(c => cardVal(c.value)).sort((a,b) => b-a);
-    return [0, ...vals];
+function eval7(hand,comm){
+  const all=[...hand,...comm];
+  if(all.length<5){const v=hand.map(c=>cv(c.value)).sort((a,b)=>b-a);return[0,...v];}
+  let best=null;
+  for(let i=0;i<all.length;i++)for(let j=i+1;j<all.length;j++){
+    const f=all.filter((_,k)=>k!==i&&k!==j);
+    if(f.length!==5)continue;
+    const s=s5(f);if(!best||cmp(s,best)>0)best=s;
   }
-  let best = null;
-  const n = all.length;
-  for (let i = 0; i < n; i++)
-    for (let j = i+1; j < n; j++) {
-      const five = all.filter((_,idx) => idx !== i && idx !== j);
-      if (five.length !== 5) continue;
-      const score = score5(five);
-      if (!best || compareScore(score, best) > 0) best = score;
-    }
-  return best || [0];
+  return best||[0];
 }
 
-function score5(cards) {
-  const vals = cards.map(c => cardVal(c.value)).sort((a,b) => b-a);
-  const suits = cards.map(c => c.suit);
-  const isFlush = suits.every(s => s === suits[0]);
-  const uv = [...new Set(vals)].sort((a,b) => b-a);
-  const isStraight = (uv.length === 5 && uv[0]-uv[4] === 4) ||
-    (JSON.stringify(uv) === JSON.stringify([14,5,4,3,2]));
-  const counts = {};
-  vals.forEach(v => counts[v] = (counts[v]||0)+1);
-  const groups = Object.entries(counts).sort((a,b) => b[1]-a[1] || b[0]-a[0]);
-  const freq = groups.map(g => g[1]);
-  const tb = groups.flatMap(g => Array(parseInt(g[1])).fill(parseInt(g[0]))).sort((a,b)=>b-a);
-
-  let rank;
-  if (isFlush && isStraight) rank = 8;
-  else if (freq[0]===4) rank = 7;
-  else if (freq[0]===3 && freq[1]===2) rank = 6;
-  else if (isFlush) rank = 5;
-  else if (isStraight) rank = 4;
-  else if (freq[0]===3) rank = 3;
-  else if (freq[0]===2 && freq[1]===2) rank = 2;
-  else if (freq[0]===2) rank = 1;
-  else rank = 0;
-  return [rank, ...tb];
+function s5(c){
+  const v=c.map(x=>cv(x.value)).sort((a,b)=>b-a);
+  const su=c.map(x=>x.suit);
+  const fl=su.every(s=>s===su[0]);
+  const uv=[...new Set(v)].sort((a,b)=>b-a);
+  const st=(uv.length===5&&uv[0]-uv[4]===4)||(JSON.stringify(uv)===JSON.stringify([14,5,4,3,2]));
+  const cnt={};v.forEach(x=>cnt[x]=(cnt[x]||0)+1);
+  const g=Object.entries(cnt).sort((a,b)=>b[1]-a[1]||b[0]-a[0]);
+  const fr=g.map(x=>x[1]);
+  const tb=g.flatMap(x=>Array(+x[1]).fill(+x[0])).sort((a,b)=>b-a);
+  let r;
+  if(fl&&st)r=8;else if(fr[0]===4)r=7;else if(fr[0]===3&&fr[1]===2)r=6;
+  else if(fl)r=5;else if(st)r=4;else if(fr[0]===3)r=3;
+  else if(fr[0]===2&&fr[1]===2)r=2;else if(fr[0]===2)r=1;else r=0;
+  return[r,...tb];
 }
 
-function compareScore(a, b) {
-  for (let i = 0; i < Math.max(a.length, b.length); i++) {
-    const av = a[i]??0, bv = b[i]??0;
-    if (av !== bv) return av - bv;
-  }
-  return 0;
-}
-
-function comboName(score) { return COMBO_NAMES[score[0]] || ''; }
+function cmp(a,b){for(let i=0;i<Math.max(a.length,b.length);i++){const d=(a[i]??0)-(b[i]??0);if(d)return d;}return 0;}
+const cname=s=>CN[s[0]]||'';
 
 // ===== RENDER CARD =====
-function renderCard(card, faceUp, animDelay = 0) {
-  const div = document.createElement('div');
-  div.className = 'card ' + (faceUp ? `face-up ${card.suit}` : 'face-down');
-  if (faceUp) {
-    const sym = SUIT_SYMBOLS[card.suit];
-    div.innerHTML = `
-      <div class="card-corner">${card.value}<br>${sym}</div>
-      <div class="card-suit-center">${sym}</div>
-      <div class="card-corner br">${card.value}<br>${sym}</div>`;
-  }
-  if (animDelay > 0) {
-    div.classList.add('new-reveal');
-    div.style.animationDelay = animDelay + 's';
-  }
-  return div;
+function mkCard(card,up,delay=0){
+  const d=document.createElement('div');
+  d.className='card '+(up?`up ${card.suit}`:'dn');
+  if(up){const s=SS[card.suit];d.innerHTML=`<div class="cc">${card.value}<br>${s}</div><div class="cs">${s}</div><div class="cc br">${card.value}<br>${s}</div>`;}
+  if(delay>0){d.classList.add('anim');d.style.animationDelay=delay+'s';}
+  return d;
 }
 
 // ===== STATE =====
-let ws = null;
-let myId = null;
-let myName = '';
-let roomId = '';
-let gameState = null;
-let lastPhase = -1;
+let ws=null,myName='',roomId='',G=null,lastPhase=-1;
+const HOST='the-gang.youlostbg-creator.partykit.dev';
 
-// ===== PARTYKIT CONNECTION =====
-const PARTYKIT_HOST = 'the-gang.youlostbg-creator.partykit.dev';
-
-function connect(room) {
-  roomId = room;
-  if (ws) ws.close();
-  ws = new WebSocket(`wss://${PARTYKIT_HOST}/party/${room}`);
-
-  ws.onopen = () => {
-    send({ type: 'join', name: myName });
-  };
-
-  ws.onmessage = (e) => {
-    const msg = JSON.parse(e.data);
-    if (msg.type === 'state') {
-      handleState(msg.state);
-    }
-    if (msg.type === 'error') {
-      showToast(msg.message);
-    }
-  };
-
-  ws.onclose = () => {
-    showToast('Соединение потеряно. Перезагрузи страницу.');
-  };
-
-  // Derive myId from connection — PartyKit assigns IDs server-side
-  // We'll match by name for simplicity (names should be unique)
+// ===== CONNECT =====
+function connect(room){
+  roomId=room;
+  if(ws)ws.close();
+  ws=new WebSocket(`wss://${HOST}/party/${room}`);
+  ws.onopen=()=>send({type:'join',name:myName});
+  ws.onmessage=e=>{const m=JSON.parse(e.data);if(m.type==='state')onState(m.state);if(m.type==='error')toast(m.message);};
+  ws.onclose=()=>toast('Соединение потеряно. Перезагрузи страницу.');
 }
-
-function send(msg) {
-  if (ws && ws.readyState === WebSocket.OPEN)
-    ws.send(JSON.stringify(msg));
-}
+function send(m){if(ws&&ws.readyState===1)ws.send(JSON.stringify(m));}
 
 // ===== STATE HANDLER =====
-function handleState(state) {
-  gameState = state;
-
-  // Find myself
-  const me = state.players.find(p => p.name === myName);
-
-  if (state.status === 'lobby') {
-    showScreen('lobby-screen');
-    renderLobby(state, me);
-  } else if (state.status === 'playing') {
-    showScreen('game-screen');
-    renderGame(state, me);
-  }
+function onState(state){
+  G=state;
+  const me=state.players.find(p=>p.name===myName);
+  if(state.status==='lobby'){show('lobby');renderLobby(state,me);}
+  else{show('game');renderGame(state,me);}
 }
 
 // ===== LOBBY =====
-function renderLobby(state, me) {
-  document.getElementById('room-code-text').textContent = roomId.toUpperCase();
-
-  const list = document.getElementById('lobby-players-list');
-  list.innerHTML = '';
-  state.players.forEach(p => {
-    const row = document.createElement('div');
-    row.className = 'lobby-player';
-    row.innerHTML = `<div class="lobby-player-dot"></div>
-      <span>${p.name}${p.id === state.hostId ? '<span class="host-badge">Хост</span>' : ''}</span>`;
-    list.appendChild(row);
+function renderLobby(S,me){
+  document.getElementById('lcode').textContent=roomId.toUpperCase();
+  const list=document.getElementById('lplayers');
+  list.innerHTML='';
+  S.players.forEach(p=>{
+    const r=document.createElement('div');r.className='lobby-player';
+    r.innerHTML=`<div class="dot ${p.connected!==false?'dot-on':'dot-off'}"></div>
+      <span>${p.name}${p.id===S.hostId?'<span class="badge">Хост</span>':''}</span>`;
+    list.appendChild(r);
   });
-
-  const waitingEl = document.getElementById('lobby-waiting-text');
-  waitingEl.textContent = state.players.length < 2
-    ? 'Ждём хотя бы ещё одного игрока...'
-    : `${state.players.length} игрок(а) готовы`;
-
-  const startBtn = document.getElementById('start-game-btn');
-  if (me && me.id === state.hostId && state.players.length >= 2) {
-    startBtn.style.display = 'block';
-  } else {
-    startBtn.style.display = 'none';
-  }
+  document.getElementById('lwait').textContent=S.players.length<2?'Ждём хотя бы ещё одного...':''+S.players.length+' игрок(а) готовы';
+  const bs=document.getElementById('bstart');
+  bs.style.display=(me&&me.id===S.hostId&&S.players.length>=2)?'block':'none';
 }
 
 // ===== GAME =====
-function renderGame(state, me) {
-  document.getElementById('my-name-display').textContent = myName;
-
-  renderPhaseDots(state);
-  renderCommunityCards(state);
-  renderInstruction(state, me);
-  renderPlayers(state, me);
-  renderBottomBar(state, me);
+function renderGame(S,me){
+  document.getElementById('myname').textContent=myName;
+  renderDots(S);
+  renderComm(S);
+  renderInstr(S,me);
+  renderPlayers(S,me);
+  renderBottom(S,me);
+  if(S.allChipsDone)renderResult(S);
 }
 
-function renderPhaseDots(state) {
-  const container = document.getElementById('phase-dots');
-  container.innerHTML = '';
-  for (let i = 0; i < 4; i++) {
-    const dot = document.createElement('div');
-    dot.className = 'phase-dot';
-    if (i < state.chipPhase || state.allChipsDone) dot.classList.add('done');
-    else if (i === state.chipPhase) dot.classList.add('active');
-    container.appendChild(dot);
+function renderDots(S){
+  const c=document.getElementById('pdots');c.innerHTML='';
+  for(let i=0;i<4;i++){const d=document.createElement('div');d.className='pdot';
+    if(i<S.chipPhase||S.allChipsDone)d.classList.add('done');
+    else if(i===S.chipPhase)d.classList.add('active');
+    c.appendChild(d);}
+}
+
+function renderComm(S){
+  const c=document.getElementById('ccards');
+  const vis=S.phase===0?0:S.phase===1?3:S.phase===2?4:5;
+  const newPhase=S.phase!==lastPhase;
+  if(newPhase)lastPhase=S.phase;
+  c.innerHTML='';
+  for(let i=0;i<5;i++){
+    const card=S.community[i];const v=i<vis;
+    const isNew=newPhase&&v&&((S.phase===1&&i<3)||(S.phase===2&&i===3)||(S.phase===3&&i===4));
+    c.appendChild(mkCard(card,v,isNew?(i-(S.phase===1?0:S.phase===2?3:4))*.1:0));
   }
 }
 
-function renderCommunityCards(state) {
-  const container = document.getElementById('community-cards');
-  const phase = state.phase;
-  const visibleCount = phase === 0 ? 0 : phase === 1 ? 3 : phase === 2 ? 4 : 5;
-  const isNewPhase = phase !== lastPhase;
-  if (isNewPhase) lastPhase = phase;
-
-  container.innerHTML = '';
-  for (let i = 0; i < 5; i++) {
-    const card = state.community[i];
-    const visible = i < visibleCount;
-    const isNew = isNewPhase && visible && (
-      (phase === 1 && i < 3) ||
-      (phase === 2 && i === 3) ||
-      (phase === 3 && i === 4)
-    );
-    container.appendChild(renderCard(card, visible, isNew ? (i - (phase===1?0:phase===2?3:4)) * 0.1 : 0));
-  }
+function renderInstr(S,me){
+  const el=document.getElementById('instr');
+  const pn=['до флопа','на флопе','на тёрне','на ривере'];
+  if(S.allChipsDone){el.innerHTML='Все фишки выбраны!';return;}
+  const waiting=S.players.filter(p=>!p.ready&&p.currentChip===null);
+  const iPicked=me&&(me.ready||me.currentChip!==null);
+  if(!iPicked)el.innerHTML=`Выбери фишку <strong>${pn[S.chipPhase]}</strong> — насколько сильна твоя рука?`;
+  else if(S.players.some(p=>!p.ready))el.innerHTML=`Ждём: ${S.players.filter(p=>!p.ready).map(p=>`<strong>${p.name}</strong>`).join(', ')}`;
+  else el.innerHTML='Все выбрали!';
 }
 
-function renderInstruction(state, me) {
-  const el = document.getElementById('phase-instruction');
-  const phaseNames = ['до флопа','на флопе','на тёрне','на ривере'];
-  if (state.allChipsDone) {
-    el.innerHTML = 'Все фишки выбраны! <strong>Вскрывайте карты!</strong>';
-    return;
-  }
-  const waiting = state.players.filter(p => !p.ready);
-  const iMeReady = me && me.ready;
-  if (iMeReady) {
-    const names = waiting.map(p => `<strong>${p.name}</strong>`).join(', ');
-    el.innerHTML = `Ждём: ${names}`;
-  } else {
-    el.innerHTML = `Выбери фишку <strong>${phaseNames[state.chipPhase]}</strong> — насколько сильна твоя рука?`;
-  }
-}
+function renderPlayers(S,me){
+  const c=document.getElementById('players');c.innerHTML='';
+  const rn=['ДО','ФЛ','ТР','РВ'];
+  S.players.forEach(player=>{
+    const isMe=player.name===myName;
+    const panel=document.createElement('div');
+    panel.className='ppanel'+(isMe?' me':'')+(player.connected===false?' offline':'');
 
-function renderPlayers(state, me) {
-  const container = document.getElementById('players-section');
-  container.innerHTML = '';
-  const roundNames = ['ДО','ФЛ','ТР','РВ'];
-  const isMe = (p) => p.name === myName;
-  const revealAll = state.allChipsDone;
+    // Top row
+    const top=document.createElement('div');top.className='ptop';
 
-  state.players.forEach(player => {
-    const panel = document.createElement('div');
-    panel.className = 'player-panel' + (isMe(player) ? ' is-me' : '');
-
-    const top = document.createElement('div');
-    top.className = 'player-panel-top';
-
-    // Info
-    const info = document.createElement('div');
-    info.className = 'player-info';
-    info.innerHTML = `<div class="player-name">${player.name}${isMe(player) ? '<span class="me-label">Я</span>' : ''}</div>`;
-    if (revealAll) {
-      const score = evaluateHand(player.hand, state.community);
-      info.innerHTML += `<div class="combo-badge">${comboName(score)}</div>`;
-    }
+    const info=document.createElement('div');info.className='pinfo';
+    info.innerHTML=`<div class="pname">${player.name}${isMe?'<span class="me-lbl">Я</span>':''}</div>`;
+    if(S.allChipsDone){const sc=eval7(player.hand,S.community);info.innerHTML+=`<div class="pcombo">${cname(sc)}</div>`;}
     top.appendChild(info);
 
-    // Cards — server sends hidden cards for other players
-    const cardGroup = document.createElement('div');
-    cardGroup.className = 'player-cards';
-    player.hand.forEach(card => cardGroup.appendChild(renderCard(card, card.suit !== 'hidden')));
-    top.appendChild(cardGroup);
+    const cards=document.createElement('div');cards.className='pcards';
+    player.hand.forEach(card=>cards.appendChild(mkCard(card,card.suit!=='hidden')));
+    top.appendChild(cards);
 
-    // Chip action (only for me, only if not ready)
-    if (!revealAll && !state.allChipsDone) {
-      if (isMe(player) && !player.ready) {
-        const sel = document.createElement('div');
-        sel.className = 'chip-selector';
-        const n = state.players.length;
-        let selectedStars = null;
+    // Chip UI — only for me and only if not done
+    if(isMe&&!S.allChipsDone){
+      const n=S.players.length;
+      const sel=document.createElement('div');sel.className='chips';
+      let picked=player.currentChip;
 
-        for (let stars = 1; stars <= n; stars++) {
-          const isTaken = state.takenChips[state.chipPhase].includes(stars);
-          const chip = document.createElement('div');
-          chip.className = 'chip ' + (isTaken ? 'taken' : 'available');
-          chip.innerHTML = `<div class="chip-stars">${'★'.repeat(Math.min(stars,5))}<br>${stars}★</div>`;
-          if (!isTaken) {
-            chip.onclick = () => {
-              sel.querySelectorAll('.chip.selected').forEach(c => { c.classList.remove('selected'); c.classList.add('available'); });
-              chip.classList.remove('available');
-              chip.classList.add('selected');
-              selectedStars = stars;
-              confirmBtn.disabled = false;
-            };
-          }
-          sel.appendChild(chip);
+      for(let stars=1;stars<=n;stars++){
+        const takenByOther=S.players.some(p=>p.name!==myName&&p.ready&&p.chipChoices[S.chipPhase]===stars);
+        const isPending=S.players.some(p=>p.name!==myName&&!p.ready&&p.currentChip===stars);
+        const chip=document.createElement('div');
+        const isSel=player.currentChip===stars;
+        const isTaken=takenByOther;
+        chip.className='chip '+(isTaken?'taken':isSel?'sel':'avail');
+        chip.innerHTML=`<div class="chip-s">${'★'.repeat(Math.min(stars,5))}<br>${stars}★</div>`;
+        if(!isTaken){
+          chip.onclick=()=>{send({type:'pick_chip',stars});};
         }
+        sel.appendChild(chip);
+      }
+      top.appendChild(sel);
 
-        const confirmBtn = document.createElement('button');
-        confirmBtn.className = 'confirm-chip-btn';
-        confirmBtn.textContent = 'ОК';
-        confirmBtn.disabled = true;
-        confirmBtn.onclick = () => {
-          if (selectedStars !== null) {
-            send({ type: 'pick_chip', stars: selectedStars });
-          }
-        };
-        top.appendChild(sel);
-        top.appendChild(confirmBtn);
-      } else if (isMe(player) && player.ready) {
-        const w = document.createElement('div');
-        w.style.cssText = 'font-size:13px;color:var(--muted);white-space:nowrap;';
-        w.textContent = '⏳ Ждём других...';
-        top.appendChild(w);
+      // OK + Cancel buttons
+      if(!player.ready){
+        const acts=document.createElement('div');acts.className='chip-actions';
+        const ok=document.createElement('button');ok.className='cbtn cbtn-ok';ok.textContent='ОК';
+        ok.disabled=player.currentChip===null;
+        ok.onclick=()=>send({type:'confirm_chip'});
+        acts.appendChild(ok);
+        if(player.currentChip!==null){
+          const cancel=document.createElement('button');cancel.className='cbtn cbtn-cancel';cancel.textContent='Отмена';
+          cancel.onclick=()=>send({type:'cancel_chip'});
+          acts.appendChild(cancel);
+        }
+        top.appendChild(acts);
+      } else {
+        const w=document.createElement('div');w.style.cssText='font-size:13px;color:var(--muted);white-space:nowrap;';
+        w.textContent='⏳ Ждём других...';top.appendChild(w);
+      }
+    } else if(!isMe&&!S.allChipsDone){
+      // Show other player's pending chip (if any) as visual indicator
+      if(player.currentChip!==null||player.ready){
+        const ind=document.createElement('div');
+        ind.style.cssText='font-size:13px;color:var(--muted);';
+        ind.textContent=player.ready?'✓ Подтвердил':'🤔 Выбирает...';
+        top.appendChild(ind);
       }
     }
 
     panel.appendChild(top);
 
     // Chip history
-    if (player.chipChoices.length > 0) {
-      const hist = document.createElement('div');
-      hist.className = 'player-chip-history';
-      const lbl = document.createElement('span');
-      lbl.className = 'hist-label';
-      lbl.textContent = 'Фишки:';
-      hist.appendChild(lbl);
-
-      player.chipChoices.forEach((s, ri) => {
-        const isCurrent = !revealAll && ri === state.chipPhase;
-        const c = document.createElement('div');
-        c.className = 'hist-chip' + (isCurrent ? ' current' : '');
-        c.innerHTML = `<div class="hist-chip-stars">${s}★</div><div class="hist-chip-label">${roundNames[ri]}</div>`;
-        hist.appendChild(c);
+    const allChips=[...player.chipChoices];
+    if(player.currentChip!==null&&!player.ready)allChips.push(null); // pending slot
+    if(player.chipChoices.length>0){
+      const hist=document.createElement('div');hist.className='hist';
+      const lbl=document.createElement('span');lbl.className='hlbl';lbl.textContent='Фишки:';hist.appendChild(lbl);
+      player.chipChoices.forEach((s,ri)=>{
+        const cur=!S.allChipsDone&&ri===S.chipPhase;
+        const hc=document.createElement('div');hc.className='hchip'+(cur?' cur':'');
+        hc.innerHTML=`<div class="hs">${s}★</div><div class="hl">${rn[ri]}</div>`;
+        hist.appendChild(hc);
       });
       panel.appendChild(hist);
     }
 
-    container.appendChild(panel);
+    c.appendChild(panel);
   });
 }
 
-function renderBottomBar(state, me) {
-  const bar = document.getElementById('bottom-bar');
-  bar.innerHTML = '';
-  if (state.allChipsDone && me && me.id === state.hostId) {
-    const btn = document.createElement('button');
-    btn.className = 'btn-reveal';
-    btn.textContent = 'ВСКРЫТЬ КАРТЫ';
-    btn.onclick = () => showResult(state);
-    bar.appendChild(btn);
-  } else if (state.allChipsDone) {
-    bar.innerHTML = '<div style="font-size:14px;color:var(--muted);">Ждём хоста для вскрытия...</div>';
-  }
+function renderBottom(S,me){
+  document.getElementById('bottom').innerHTML='';
 }
 
 // ===== RESULT =====
-function showResult(state) {
-  const scores = state.players.map(p => ({
-    name: p.name,
-    hand: p.hand,
-    score: evaluateHand(p.hand, state.community),
-    chipChoices: p.chipChoices,
+let resultShown=false;
+function renderResult(S){
+  if(resultShown)return;
+  resultShown=true;
+
+  const scores=S.players.map(p=>({
+    name:p.name,hand:p.hand,
+    score:eval7(p.hand,S.community),
+    chips:p.chipChoices,
   }));
-
-  const sorted = [...scores].sort((a, b) => compareScore(b.score, a.score));
-  const communityPerRound = [[], state.community.slice(0,3), state.community.slice(0,4), state.community.slice(0,5)];
-  const roundResults = [];
-
-  for (let round = 0; round < 4; round++) {
-    const comm = communityPerRound[round];
-    const rs = scores.map((p, i) => ({
-      idx: i,
-      score: evaluateHand(p.hand, comm),
-      stars: p.chipChoices[round],
-    }));
-    const byStrength = [...rs].sort((a,b) => compareScore(a.score, b.score));
-    const expected = {};
-    byStrength.forEach((p, rank) => { expected[p.idx] = rank + 1; });
-    roundResults.push(scores.every((_, i) => rs[i].stars === expected[i]));
-  }
-
-  const win = roundResults[3];
-
-  const overlay = document.createElement('div');
-  overlay.className = 'result-overlay';
-
-  const card = document.createElement('div');
-  card.className = 'result-card';
-  card.innerHTML = `
-    <div class="result-emoji">${win ? '🏆' : '💥'}</div>
-    <div class="result-title ${win ? 'win' : 'lose'}">${win ? 'ПОБЕДА!' : 'ПРОВАЛ'}</div>
-    <div class="result-subtitle">${win ? 'На ривере все верно оценили силу рук!' : 'На ривере порядок фишек не совпал...'}</div>
-  `;
-
-  const plist = document.createElement('div');
-  plist.className = 'result-players';
-  sorted.forEach((p, rank) => {
-    const row = document.createElement('div');
-    row.className = 'result-player-row';
-    const chipsHtml = p.chipChoices.map((c, ri) =>
-      `<span style="color:${roundResults[ri]?'var(--green)':'var(--red)'}">${c}★</span>`
-    ).join(' ');
-    row.innerHTML = `
-      <div class="result-rank">#${rank+1}</div>
-      <div style="flex:1"><div class="result-player-name">${p.name}</div><div class="result-combo">${comboName(p.score)}</div></div>
-      <div style="font-size:12px">${chipsHtml}</div>`;
-    plist.appendChild(row);
+  const sorted=[...scores].sort((a,b)=>cmp(b.score,a.score));
+  const commR=[[],S.community.slice(0,3),S.community.slice(0,4),S.community.slice(0,5)];
+  const rr=commR.map((comm,round)=>{
+    const rs=scores.map((p,i)=>({i,score:eval7(p.hand,comm),stars:p.chips[round]}));
+    const by=[...rs].sort((a,b)=>cmp(a.score,b.score));
+    const exp={};by.forEach((p,r)=>exp[p.i]=r+1);
+    return scores.every((_,i)=>rs[i].stars===exp[i]);
   });
-  card.appendChild(plist);
+  const win=rr[3];
 
-  const breakdown = document.createElement('div');
-  breakdown.className = 'result-breakdown';
-  ['До флопа','Флоп','Тёрн','Ривер ⭐'].forEach((lbl, i) => {
-    const pill = document.createElement('div');
-    pill.className = `round-pill ${roundResults[i] ? 'ok' : 'fail'} ${i===3 ? 'decisive' : ''}`;
-    pill.textContent = lbl + ' ' + (roundResults[i] ? '✓' : '✗');
-    breakdown.appendChild(pill);
+  const ov=document.createElement('div');ov.className='overlay';
+  const rc=document.createElement('div');rc.className='rcard';
+  rc.innerHTML=`<div class="remoji">${win?'🏆':'💥'}</div>
+    <div class="rtitle ${win?'win':'lose'}">${win?'ПОБЕДА!':'ПРОВАЛ'}</div>
+    <div class="rsub">${win?'На ривере все верно оценили силу рук!':'На ривере порядок фишек не совпал...'}</div>`;
+
+  const pl=document.createElement('div');pl.className='rplayers';
+  sorted.forEach((p,rank)=>{
+    const row=document.createElement('div');row.className='rrow';
+    const chips=p.chips.map((c,ri)=>`<span style="color:${rr[ri]?'var(--green)':'var(--red)'}">${c}★</span>`).join(' ');
+    row.innerHTML=`<div class="rrank">#${rank+1}</div>
+      <div style="flex:1"><div class="rname">${p.name}</div><div class="rcombo">${cname(p.score)}</div></div>
+      <div style="font-size:12px">${chips}</div>`;
+    pl.appendChild(row);
   });
-  card.appendChild(breakdown);
+  rc.appendChild(pl);
 
-  // Only host can restart
-  const me = state.players.find(p => p.name === myName);
-  if (me && me.id === state.hostId) {
-    const btn = document.createElement('button');
-    btn.className = 'btn-play-again';
-    btn.textContent = 'ИГРАТЬ СНОВА';
-    btn.onclick = () => { overlay.remove(); send({ type: 'restart' }); };
-    card.appendChild(btn);
+  const bd=document.createElement('div');bd.className='rounds';
+  ['До флопа','Флоп','Тёрн','Ривер ⭐'].forEach((l,i)=>{
+    const pill=document.createElement('div');
+    pill.className=`rpill ${rr[i]?'ok':'fail'}${i===3?' key':''}`;
+    pill.textContent=l+' '+(rr[i]?'✓':'✗');
+    bd.appendChild(pill);
+  });
+  rc.appendChild(bd);
+
+  const me=S.players.find(p=>p.name===myName);
+  if(me&&me.id===S.hostId){
+    const btn=document.createElement('button');btn.className='btn btn-gold';btn.style.marginTop='4px';
+    btn.textContent='ИГРАТЬ СНОВА';
+    btn.onclick=()=>{ov.remove();resultShown=false;send({type:'restart'});};
+    rc.appendChild(btn);
   } else {
-    card.innerHTML += '<div style="font-size:13px;color:var(--muted);margin-top:8px;">Ждём хоста для новой игры...</div>';
+    rc.innerHTML+=`<p style="font-size:13px;color:var(--muted);margin-top:12px;">Ждём хоста для новой игры...</p>`;
   }
-
-  overlay.appendChild(card);
-  document.body.appendChild(overlay);
+  ov.appendChild(rc);document.body.appendChild(ov);
 }
 
-// ===== UI HELPERS =====
-function showScreen(id) {
-  document.querySelectorAll('.screen').forEach(s => s.classList.remove('active'));
+// ===== HELPERS =====
+function show(id){
+  document.querySelectorAll('.screen').forEach(s=>s.classList.remove('active'));
   document.getElementById(id).classList.add('active');
+  if(id==='game')document.getElementById('game').classList.add('active');
+  resultShown=false;
 }
+function toast(msg){const t=document.createElement('div');t.className='toast';t.textContent=msg;document.body.appendChild(t);setTimeout(()=>t.remove(),3000);}
+function copyCode(){navigator.clipboard.writeText(roomId.toUpperCase()).then(()=>toast('Код скопирован!'));}
+function genRoom(){const c='ABCDEFGHJKLMNPQRSTUVWXYZ23456789';return Array.from({length:3},()=>c[Math.floor(Math.random()*c.length)]).join('').toLowerCase();}
 
-function showToast(msg) {
-  const t = document.createElement('div');
-  t.className = 'toast';
-  t.textContent = msg;
-  document.body.appendChild(t);
-  setTimeout(() => t.remove(), 3000);
-}
-
-function copyRoomCode() {
-  navigator.clipboard.writeText(roomId.toUpperCase()).then(() => showToast('Код скопирован!'));
-}
-
-function generateRoomId() {
-  const chars = 'ABCDEFGHJKLMNPQRSTUVWXYZ23456789';
-  return Array.from({length: 5}, () => chars[Math.floor(Math.random() * chars.length)]).join('');
-}
-
-// ===== EVENT LISTENERS =====
-document.getElementById('create-btn').addEventListener('click', () => {
-  const name = document.getElementById('player-name-input').value.trim();
-  if (!name) { showToast('Введите имя'); return; }
-  myName = name;
-  const room = generateRoomId().toLowerCase();
-  connect(room);
-  showScreen('lobby-screen');
-});
-
-document.getElementById('join-btn').addEventListener('click', () => {
-  const name = document.getElementById('player-name-input').value.trim();
-  const code = document.getElementById('room-code-input').value.trim().toLowerCase();
-  if (!name) { showToast('Введите имя'); return; }
-  if (!code) { showToast('Введите код комнаты'); return; }
-  myName = name;
-  connect(code);
-  showScreen('lobby-screen');
-});
-
-document.getElementById('room-code-input').addEventListener('keyup', e => {
-  if (e.key === 'Enter') document.getElementById('join-btn').click();
-});
-
-document.getElementById('start-game-btn').addEventListener('click', () => {
-  send({ type: 'start' });
-});
-
-document.getElementById('leave-btn').addEventListener('click', () => {
-  send({ type: 'leave' });
-  if (ws) ws.close();
-  showScreen('join-screen');
-});
+// ===== EVENTS =====
+document.getElementById('bcreate').onclick=()=>{
+  const n=document.getElementById('iname').value.trim();
+  if(!n){toast('Введите имя');return;}
+  myName=n;connect(genRoom());show('lobby');
+};
+document.getElementById('bjoin').onclick=()=>{
+  const n=document.getElementById('iname').value.trim();
+  const c=document.getElementById('icode').value.trim().toLowerCase();
+  if(!n){toast('Введите имя');return;}
+  if(!c){toast('Введите код');return;}
+  myName=n;connect(c);show('lobby');
+};
+document.getElementById('icode').onkeyup=e=>{if(e.key==='Enter')document.getElementById('bjoin').click();};
+document.getElementById('bstart').onclick=()=>send({type:'start'});
+document.getElementById('bleave').onclick=()=>{send({type:'leave'});if(ws)ws.close();show('join');};
 </script>
 </body>
 </html>
