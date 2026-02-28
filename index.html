@@ -162,6 +162,10 @@
       <input id="icode" placeholder="Код комнаты" maxlength="3" style="text-transform:uppercase;letter-spacing:.2em;font-size:18px;">
       <button class="btn btn-gold" id="bjoin" style="width:auto;padding:14px 20px;margin-top:0;">ВОЙТИ</button>
     </div>
+    <div id="reconnect-wrap" style="display:none;margin-top:10px;">
+      <div class="divider">ПОСЛЕДНЯЯ СЕССИЯ</div>
+      <button class="btn btn-ghost" id="breconnect">🔄 ПЕРЕПОДКЛЮЧИТЬСЯ</button>
+    </div>
   </div>
 </div>
 
@@ -185,10 +189,15 @@
 <!-- GAME -->
 <div id="game" class="screen">
   <div class="game-header">
-    <span class="gtitle">THE GANG</span>
+    <div style="display:flex;align-items:center;gap:10px;">
+      <span class="gtitle">THE GANG</span>
+      <span id="game-room-code" style="font-family:'Bebas Neue',sans-serif;font-size:16px;color:var(--muted);background:var(--s2);border-radius:8px;padding:4px 10px;letter-spacing:.15em;cursor:pointer;" title="Нажми чтобы скопировать" onclick="copyCode()"></span>
+    </div>
     <div style="display:flex;align-items:center;gap:10px;">
       <div class="phase-dots" id="pdots"></div>
       <div class="my-badge">Я: <span id="myname"></span></div>
+      <span id="spectator-badge" style="display:none;font-size:10px;letter-spacing:.1em;text-transform:uppercase;color:#e05050;background:rgba(224,80,80,.1);border-radius:4px;padding:2px 6px;">Зритель</span>
+      <button onclick="document.getElementById('combo-modal').style.display='flex'" style="background:var(--s2);border:1px solid rgba(255,255,255,.1);border-radius:8px;color:var(--muted);font-family:'Bebas Neue',sans-serif;font-size:13px;letter-spacing:.08em;padding:5px 10px;cursor:pointer;" title="Таблица комбинаций">★ КОМБО</button>
     </div>
   </div>
   <div class="comm-section">
@@ -198,6 +207,28 @@
   <div class="instr" id="instr"></div>
   <div class="players" id="players"></div>
   <div class="bottom" id="bottom"></div>
+</div>
+
+<!-- COMBINATIONS MODAL -->
+<div id="combo-modal" style="display:none;position:fixed;inset:0;background:rgba(14,14,18,.93);z-index:150;align-items:center;justify-content:center;padding:24px;animation:fi .3s ease;">
+  <div style="background:var(--surface);border-radius:20px;padding:28px;max-width:420px;width:100%;border:1px solid rgba(255,255,255,.08);max-height:90vh;overflow-y:auto;">
+    <div style="display:flex;align-items:center;justify-content:space-between;margin-bottom:18px;">
+      <div style="font-family:'Bebas Neue',sans-serif;font-size:24px;color:var(--accent);letter-spacing:.1em;">Комбинации покера</div>
+      <button onclick="document.getElementById('combo-modal').style.display='none'" style="background:transparent;border:none;color:var(--muted);font-size:22px;cursor:pointer;line-height:1;">✕</button>
+    </div>
+    <div style="display:flex;flex-direction:column;gap:8px;font-size:14px;">
+      <div style="background:var(--s2);border-radius:10px;padding:10px 14px;display:flex;justify-content:space-between;align-items:center;"><span style="color:var(--text);font-weight:600;">Стрит-флеш</span><span style="color:var(--muted);">5 карт одной масти по порядку</span></div>
+      <div style="background:var(--s2);border-radius:10px;padding:10px 14px;display:flex;justify-content:space-between;align-items:center;"><span style="color:var(--text);font-weight:600;">Каре</span><span style="color:var(--muted);">Четыре одинаковых</span></div>
+      <div style="background:var(--s2);border-radius:10px;padding:10px 14px;display:flex;justify-content:space-between;align-items:center;"><span style="color:var(--text);font-weight:600;">Фулл-хаус</span><span style="color:var(--muted);">Тройка + пара</span></div>
+      <div style="background:var(--s2);border-radius:10px;padding:10px 14px;display:flex;justify-content:space-between;align-items:center;"><span style="color:var(--text);font-weight:600;">Флеш</span><span style="color:var(--muted);">5 карт одной масти</span></div>
+      <div style="background:var(--s2);border-radius:10px;padding:10px 14px;display:flex;justify-content:space-between;align-items:center;"><span style="color:var(--text);font-weight:600;">Стрит</span><span style="color:var(--muted);">5 карт по порядку</span></div>
+      <div style="background:var(--s2);border-radius:10px;padding:10px 14px;display:flex;justify-content:space-between;align-items:center;"><span style="color:var(--text);font-weight:600;">Тройка</span><span style="color:var(--muted);">Три одинаковых</span></div>
+      <div style="background:var(--s2);border-radius:10px;padding:10px 14px;display:flex;justify-content:space-between;align-items:center;"><span style="color:var(--text);font-weight:600;">Две пары</span><span style="color:var(--muted);">Две разные пары</span></div>
+      <div style="background:var(--s2);border-radius:10px;padding:10px 14px;display:flex;justify-content:space-between;align-items:center;"><span style="color:var(--text);font-weight:600;">Пара</span><span style="color:var(--muted);">Две одинаковых</span></div>
+      <div style="background:var(--s2);border-radius:10px;padding:10px 14px;display:flex;justify-content:space-between;align-items:center;"><span style="color:var(--text);font-weight:600;">Старшая карта</span><span style="color:var(--muted);">Ничего из вышеперечисленного</span></div>
+    </div>
+    <p style="font-size:11px;color:var(--muted);margin-top:14px;text-align:center;">Сила идёт от сильнейшего к слабейшему ↑</p>
+  </div>
 </div>
 
 </div>
@@ -253,12 +284,26 @@ function mkCard(card,up,delay=0){
 let ws=null,myName='',roomId='',G=null,lastPhase=-1;
 const HOST='the-gang.youlostbg-creator.partykit.dev';
 
+// ===== RECONNECT =====
+function saveSession(){try{localStorage.setItem('tg_session',JSON.stringify({name:myName,room:roomId}));}catch(e){}}
+function loadSession(){try{return JSON.parse(localStorage.getItem('tg_session'));}catch(e){return null;}}
+(function initReconnect(){
+  const s=loadSession();
+  if(s&&s.name&&s.room){
+    const btn=document.getElementById('breconnect');
+    const wrap=document.getElementById('reconnect-wrap');
+    btn.textContent=`🔄 ВЕРНУТЬСЯ (${s.name} · ${s.room.toUpperCase()})`;
+    wrap.style.display='block';
+    btn.onclick=()=>{myName=s.name;connect(s.room);show('lobby');};
+  }
+})();
+
 // ===== CONNECT =====
 function connect(room){
   roomId=room;
   if(ws)ws.close();
   ws=new WebSocket(`wss://${HOST}/party/${room}`);
-  ws.onopen=()=>send({type:'join',name:myName});
+  ws.onopen=()=>{send({type:'join',name:myName});saveSession();};
   ws.onmessage=e=>{const m=JSON.parse(e.data);if(m.type==='state')onState(m.state);if(m.type==='error')toast(m.message);};
   ws.onclose=()=>toast('Соединение потеряно. Перезагрузи страницу.');
 }
@@ -291,6 +336,11 @@ function renderLobby(S,me){
 // ===== GAME =====
 function renderGame(S,me){
   document.getElementById('myname').textContent=myName;
+  const rc=document.getElementById('game-room-code');
+  if(rc)rc.textContent=roomId.toUpperCase();
+  // Spectator badge - player not in game players list
+  const specBadge=document.getElementById('spectator-badge');
+  if(specBadge)specBadge.style.display=(!me)?'inline':'none';
   renderDots(S);
   renderComm(S);
   renderInstr(S,me);
@@ -366,7 +416,7 @@ function renderPlayers(S,me){
         chip.className='chip '+(isTaken?'taken':isSel?'sel':'avail');
         chip.innerHTML=`<div class="chip-s">${'★'.repeat(Math.min(stars,5))}<br>${stars}★</div>`;
         if(!isTaken){
-          chip.onclick=()=>{send({type:'pick_chip',stars});};
+          chip.onclick=()=>{if(!player.ready)send({type:'pick_chip',stars});};
         }
         sel.appendChild(chip);
       }
@@ -379,15 +429,14 @@ function renderPlayers(S,me){
         ok.disabled=player.currentChip===null;
         ok.onclick=()=>send({type:'confirm_chip'});
         acts.appendChild(ok);
-        if(player.currentChip!==null){
-          const cancel=document.createElement('button');cancel.className='cbtn cbtn-cancel';cancel.textContent='Отмена';
-          cancel.onclick=()=>send({type:'cancel_chip'});
-          acts.appendChild(cancel);
-        }
         top.appendChild(acts);
       } else {
-        const w=document.createElement('div');w.style.cssText='font-size:13px;color:var(--muted);white-space:nowrap;';
-        w.textContent='⏳ Ждём других...';top.appendChild(w);
+        // After confirm — show cancel button
+        const acts=document.createElement('div');acts.className='chip-actions';
+        const cancel=document.createElement('button');cancel.className='cbtn cbtn-cancel';cancel.textContent='Отмена';
+        cancel.onclick=()=>send({type:'cancel_chip'});
+        acts.appendChild(cancel);
+        top.appendChild(acts);
       }
     } else if(!isMe&&!S.allChipsDone){
       // Show other player's pending chip (if any) as visual indicator
