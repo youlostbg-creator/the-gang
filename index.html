@@ -714,10 +714,10 @@ function renderPlayers(state, me) {
     }
     top.appendChild(info);
 
-    // Cards — face up only for yourself, face down for others
+    // Cards — server sends hidden cards for other players
     const cardGroup = document.createElement('div');
     cardGroup.className = 'player-cards';
-    player.hand.forEach(card => cardGroup.appendChild(renderCard(card, revealAll || isMe(player))));
+    player.hand.forEach(card => cardGroup.appendChild(renderCard(card, card.suit !== 'hidden')));
     top.appendChild(cardGroup);
 
     // Chip action (only for me, only if not ready)
